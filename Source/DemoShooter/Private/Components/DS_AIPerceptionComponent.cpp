@@ -28,7 +28,11 @@ AActor *UDS_AIPerceptionComponent::GetClosestEnemy() const
     for (const auto ActorOne : PerceiveActors)
     {
         const auto HealthComponent = DS_Utils::GetComponentByUserClass<UDSHealthComponent>(ActorOne);
-        if (HealthComponent && !HealthComponent->IsDead())
+
+        const auto PerceivePawn = Cast<APawn>(ActorOne);
+        const auto AreEnemies = PerceivePawn && DS_Utils::AreEnemies(Controller, PerceivePawn->Controller);
+
+        if (HealthComponent && !HealthComponent->IsDead() && AreEnemies)
         {
             const auto CurrentDistance = (ActorOne->GetActorLocation() - Pawn->GetActorLocation()).Size();
             if (CurrentDistance < BestDistance)

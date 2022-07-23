@@ -16,6 +16,8 @@ class DEMOSHOOTER_API ADS_PlayerState : public APlayerState
 
 public:
     void SetTeamID(int32 ID){TeamID = ID;};
+
+    UFUNCTION(BlueprintCallable)
     int32 GetTeamID() const {return TeamID;};
 
 	void SetTeamColor(const FLinearColor &Color){TeamColor = Color;};

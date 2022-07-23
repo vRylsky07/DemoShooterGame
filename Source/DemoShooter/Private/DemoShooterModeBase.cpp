@@ -89,6 +89,7 @@ void ADemoShooterModeBase::ResetOnePlayer(AController *Controller)
         Controller->GetPawn()->Reset();
     };
     RestartPlayer(Controller);
+    SetTeamColor(Controller);
 }
 void ADemoShooterModeBase::CreateTeamsInfo()
 {
@@ -111,6 +112,7 @@ void ADemoShooterModeBase::CreateTeamsInfo()
 
         TeamID = TeamID == 1 ? 2 : 1;
     };
+
 }
 FLinearColor ADemoShooterModeBase::DetermineColorByTeamID(int32 TeamID) const
 {

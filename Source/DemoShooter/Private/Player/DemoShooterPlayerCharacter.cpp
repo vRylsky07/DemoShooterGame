@@ -34,9 +34,6 @@ ADemoShooterPlayerCharacter::ADemoShooterPlayerCharacter(const FObjectInitialize
 
     HealthComponentPointer = CreateDefaultSubobject<UDSHealthComponent>("HealthComponent");
 
-    HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("TextRenderComponent");
-    HealthTextComponent->SetupAttachment(GetRootComponent());
-
     WeaponComponent = CreateDefaultSubobject<UDS_WeaponComponent>("WeaponComponent");
 
     LandedDelegate.AddDynamic(this, &ADemoShooterPlayerCharacter::OnGroundLanded);
@@ -48,7 +45,6 @@ void ADemoShooterPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
     check(HealthComponentPointer);
-    check(HealthTextComponent);
     check(DeathAnimMontagePtr);
     check(WeaponComponent);
     check(GetMesh());
@@ -156,7 +152,6 @@ void ADemoShooterPlayerCharacter::OnDeath()
 
 void ADemoShooterPlayerCharacter::OnHealthChanged(float Health)
 {
-    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
 void ADemoShooterPlayerCharacter::OnGroundLanded(const FHitResult &Hit)

@@ -38,9 +38,6 @@ protected:
   UDSHealthComponent *HealthComponentPointer;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-  UTextRenderComponent *HealthTextComponent;
-
-  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
   UDS_WeaponComponent *WeaponComponent;
 
   UPROPERTY(EditDefaultsOnly, Category = "Animations")
