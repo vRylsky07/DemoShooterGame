@@ -13,7 +13,9 @@
 #include "Camera/CameraShakeBase.h"
 #include "Perception/AISense_Damage.h"
 #include "UI/DS_FloatingDamageWidget.h"
+#include "DemoShooterModeBase.h"
 #include "DSHealthComponent.generated.h"
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DEMOSHOOTER_API UDSHealthComponent : public UActorComponent
@@ -93,4 +95,5 @@ protected:
 
 private:
     float Health = 0.0f;
+	void Killed(AController* KillerController);
 };

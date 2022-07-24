@@ -44,15 +44,6 @@ bool ADS_BaseWeapon::CanReload() const
     return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0;
 };
 
-APlayerController * ADS_BaseWeapon::GetPlayerController() const
-{
-    const auto Player = Cast<ACharacter>(GetOwner());
-    if (!Player)
-        return nullptr;
-
-    return Player->GetController<APlayerController>();
-};
-
 bool ADS_BaseWeapon::GetTraceData(FVector &ViewLocation, FVector &ViewRotation, FVector &TraceEndPoint)
 {
     const auto Character = Cast<ACharacter>(GetOwner());
@@ -60,7 +51,7 @@ bool ADS_BaseWeapon::GetTraceData(FVector &ViewLocation, FVector &ViewRotation, 
 
     if (Character->IsPlayerControlled())
     {
-        const auto Controller = GetPlayerController();
+        const auto Controller = Character->GetController<APlayerController>();
         if (!Controller)
             return false;
 

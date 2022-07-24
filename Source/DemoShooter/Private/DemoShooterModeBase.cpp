@@ -34,6 +34,39 @@ UClass *ADemoShooterModeBase::GetDefaultPawnClassForController_Implementation(AC
     return Super::GetDefaultPawnClassForController_Implementation(InController);
 }
 
+void ADemoShooterModeBase::Killed(AController* KillerController, AController* VictimController)
+{
+    const auto KillerPlayerState = KillerController ? Cast<ADS_PlayerState>(KillerController->PlayerState) : nullptr;
+    const auto VictimPlayerState = VictimController ? Cast<ADS_PlayerState>(VictimController->PlayerState) : nullptr;
+
+    if (KillerPlayerState) 
+    {
+        KillerPlayerState->AddKill();
+    };
+
+    if (VictimPlayerState)
+    {
+        VictimPlayerState->AddDeath();
+    };
+}
+
+void ADemoShooterModeBase::LogPlayersInfo()
+{
+    if (!GetWorld()) return;
+
+    for (auto It = GetWorld()->GetControllerIterator(); It; ++It)
+    {
+        const auto Controller = It->Get();
+        if (!Controller)
+            continue;
+
+        const auto PlayerState = Cast<ADS_PlayerState>(Controller->PlayerState);
+        if (!PlayerState) continue;
+
+        PlayerState->LogInfo();
+    };
+}
+
 void ADemoShooterModeBase::SpawnBots()
 {
     if (!GetWorld()) return;
@@ -68,6 +101,7 @@ void ADemoShooterModeBase::GameTimerUpdate()
         else
         {
             UE_LOG(LogTemp, Error, TEXT("GAME OVER!"))
+            LogPlayersInfo();
         };
     };
 }
@@ -106,12 +140,15 @@ void ADemoShooterModeBase::CreateTeamsInfo()
 
         const auto PlayerState = Cast<ADS_PlayerState>(Controller->PlayerState);
         if (!PlayerState) continue;
+
         PlayerState->SetTeamID(TeamID);
         PlayerState->SetTeamColor(DetermineColorByTeamID(TeamID));
         SetTeamColor(Controller);
 
         TeamID = TeamID == 1 ? 2 : 1;
+
     };
+
 
 }
 FLinearColor ADemoShooterModeBase::DetermineColorByTeamID(int32 TeamID) const

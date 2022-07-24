@@ -21,8 +21,10 @@ void UDSHealthComponent::DamageHandler(AActor *ActorPtr1, float Dmg1, const clas
     OnHealthChanged.Broadcast(Health);
     IncreaseHealInTime = 0.0f;
 
-    if (IsDead())
+    if (IsDead()) {
+        Killed(InstigatedBy);
         OnDeath.Broadcast();
+    };
 
     if (AutoHeal && !IsDead())
         GetWorld()->GetTimerManager().SetTimer(AutoHealTimer, this, &UDSHealthComponent::AutoHealFunc, HealUpdate, true, HealDelay);
@@ -95,6 +97,20 @@ void UDSHealthComponent::BeginPlay()
     AActor *CurrentCharacter = GetOwner();
     check(CurrentCharacter);
     CurrentCharacter->OnTakeAnyDamage.AddDynamic(this, &UDSHealthComponent::DamageHandler);
+}
+
+void UDSHealthComponent::Killed(AController* KillerController)
+{
+    if (!GetWorld()) return;
+
+    const auto GameMode = Cast<ADemoShooterModeBase>(GetWorld()->GetAuthGameMode());
+    if (!GameMode) return;
+
+    const auto Player = Cast<APawn>(GetOwner());
+    const auto VictimController = Player ? Player->Controller : nullptr;
+
+    GameMode->Killed(KillerController, VictimController);
+
 }
 
 void UDSHealthComponent::AutoHealFunc()

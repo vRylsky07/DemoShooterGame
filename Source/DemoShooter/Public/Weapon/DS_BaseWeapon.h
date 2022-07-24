@@ -61,7 +61,6 @@ public:
     void GetAITraceData(FVector &ViewLocation, FVector &ViewRotation, FVector &TraceEndPoint);
     void MakeHit(FHitResult &HResult, const FVector &TraceStartPoint, const FVector &TraceEndPoint);
 
-    APlayerController *GetPlayerController() const;
     FVector GetMuzzleSocketLocation() const;
     FWeaponDataUI GetWeaponDataUI() {return UIData;};
     FAmmoData GetWeaponAmmoData() {return CurrentAmmo;};

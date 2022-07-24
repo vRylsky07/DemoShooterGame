@@ -68,6 +68,7 @@ class DEMOSHOOTER_API ADS_RifleWeapon : public ADS_BaseWeapon
         void SpawnTraceFX(const FVector &TraceStart, const FVector &TraceEnd);
         void InitMuzzleFX();
         void SetMuzzleFXVisibility(bool Visibility);
+        AController* GetController() const;
 
         virtual void BeginPlay() override;
 		virtual void StartFire() override;

@@ -88,7 +88,7 @@ bool ADS_RifleWeapon::GetTraceData(FVector &ViewLocation, FVector &ViewRotation,
 
     if (Character->IsPlayerControlled())
     {
-        const auto Controller = GetPlayerController();
+        const auto Controller = Character->GetController<APlayerController>();
         if (!Controller)
             return false;
 
@@ -158,7 +158,7 @@ void ADS_RifleWeapon::MakeDamage()
     if (!DamagedActor)
         return;
 
-    DamagedActor->TakeDamage((Damage + FMath::FRandRange(0, Damage)), {}, GetPlayerController(), this);
+    DamagedActor->TakeDamage((Damage + FMath::FRandRange(0, Damage)), {}, GetController(), this);
 }
 void ADS_RifleWeapon::SpawnTraceFX(const FVector &TraceStartRef, const FVector &TraceEndRef)
 {
@@ -183,4 +183,10 @@ void ADS_RifleWeapon::SetMuzzleFXVisibility(bool Visibility){
         MuzzleFXComponent->SetPaused(!Visibility);
         MuzzleFXComponent->SetVisibility(Visibility, true);
     };
+};
+
+AController* ADS_RifleWeapon::GetController() const
+{
+    const auto Pawn = Cast<APawn>(GetOwner());
+    return Pawn ? Pawn->GetController() : nullptr;
 };

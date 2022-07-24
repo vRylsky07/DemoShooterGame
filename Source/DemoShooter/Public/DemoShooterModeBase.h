@@ -22,7 +22,10 @@ public:
     ADemoShooterModeBase();
 
     virtual void StartPlay() override;
-    virtual UClass * GetDefaultPawnClassForController_Implementation(AController *InController) override;
+    virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+
+    void Killed(AController* KillerController, AController* VictimController);
+    void LogPlayersInfo();
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
@@ -47,4 +50,6 @@ private:
     void CreateTeamsInfo();
     FLinearColor DetermineColorByTeamID(int32 TeamID) const;
     void SetTeamColor(AController *Controller);
+
+
 };
