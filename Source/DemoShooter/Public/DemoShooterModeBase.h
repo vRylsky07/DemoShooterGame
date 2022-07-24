@@ -27,6 +27,10 @@ public:
     void Killed(AController* KillerController, AController* VictimController);
     void LogPlayersInfo();
 
+    FGameData GetGameData() const { return GameData; };
+    int32 GetCurrentRound() const { return CurrentRound; };
+    int32 GetRoundCountDown() const { return RoundCountDown; };
+
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
     TSubclassOf<AAIController> AIControllerClass;
