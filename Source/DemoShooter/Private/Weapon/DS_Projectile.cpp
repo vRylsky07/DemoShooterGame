@@ -11,7 +11,7 @@ ADS_Projectile::ADS_Projectile()
     PrimaryActorTick.bCanEverTick = false;
     CollisionComponent = CreateDefaultSubobject<USphereComponent>("Collision Component");
     CollisionComponent->InitSphereRadius(25.0f);
-    CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
     CollisionComponent->OnComponentHit.AddDynamic(this, &ADS_Projectile::OnProjectileHit);
     CollisionComponent->bReturnMaterialOnMove = true;
