@@ -3,10 +3,14 @@
 
 #include "AI/DS_AIController.h"
 
+
+
 ADS_AIController::ADS_AIController()
 {
     AIPerceptionComponent = CreateDefaultSubobject<UDS_AIPerceptionComponent>("DS_AIPerceptionComponent");
     SetPerceptionComponent(*AIPerceptionComponent);
+
+    RespawnComponent = CreateDefaultSubobject<UDS_RespawnComponent>("DS_RespawnComponent");
 
     bWantsPlayerState = true;
 };

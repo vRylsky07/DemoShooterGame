@@ -8,9 +8,13 @@
 #include "Player/DemoShooterPlayerController.h"
 #include "DS_CoreTypes.h"
 #include "DS_PlayerState.h"
+#include "EngineUtils.h"
 #include "DemoShooterModeBase.generated.h"
 
+
 class AAIController;
+
+constexpr static int32 MinTimeForRespawn = 10;
 
 UCLASS()
 class DEMOSHOOTER_API ADemoShooterModeBase : public AGameModeBase
@@ -21,6 +25,8 @@ public:
 
     ADemoShooterModeBase();
 
+
+
     virtual void StartPlay() override;
     virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 
@@ -30,6 +36,8 @@ public:
     FGameData GetGameData() const { return GameData; };
     int32 GetCurrentRound() const { return CurrentRound; };
     int32 GetRoundCountDown() const { return RoundCountDown; };
+
+    void RespawnRequest(AController * Controller);
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
@@ -46,6 +54,7 @@ private:
     int32 RoundCountDown = 0;
     FTimerHandle GameTimeRoundHandle;
 
+    void GameOver();
     void SpawnBots();
     void StartRound();
     void GameTimerUpdate();
@@ -54,6 +63,7 @@ private:
     void CreateTeamsInfo();
     FLinearColor DetermineColorByTeamID(int32 TeamID) const;
     void SetTeamColor(AController *Controller);
+    void StartRespawn(AController* Controller);
 
 
 };

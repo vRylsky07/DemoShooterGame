@@ -2,6 +2,7 @@
 
 
 #include "Components/DSHealthComponent.h"
+#include "DS_Utils.h"
 
 UDSHealthComponent::UDSHealthComponent()
 {
@@ -12,7 +13,18 @@ UDSHealthComponent::UDSHealthComponent()
 void UDSHealthComponent::DamageHandler(AActor *ActorPtr1, float Dmg1, const class UDamageType *DamageType1,
                                        class AController * InstigatedBy, AActor *ActorEnemy1)
 {
-    if (Health <= 0 || IsDead() || !GetWorld())
+    if (!GetOwner()) return;
+
+    const auto Owner = Cast<APawn>(GetOwner());
+
+    if (!Owner)
+        return;
+
+    const auto Controller = Owner->GetController();
+    if (!Controller)
+        return;
+
+    if (Health <= 0 || IsDead() || !GetWorld() || !DS_Utils::AreEnemies(InstigatedBy, Controller))
         return;
 
     DS_Utils::PlayCameraShake(GetOwner(), IsDead(), CameraShake);

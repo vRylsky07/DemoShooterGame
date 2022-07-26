@@ -7,6 +7,7 @@
 #include "AI/DS_AICharacter.h"
 #include "Components/DS_AIPerceptionComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/DS_RespawnComponent.h"
 #include "DS_AIController.generated.h"
 
 UCLASS()
@@ -22,6 +23,9 @@ class DEMOSHOOTER_API ADS_AIController : public AAIController
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
     FName FocusOnKeyName = "EnemyActor";
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+    UDS_RespawnComponent* RespawnComponent;
 
 	protected:
     virtual void OnPossess(APawn * InPawn) override;

@@ -4,6 +4,8 @@
 #include "DemoShooterModeBase.h"
 #include "UI/DS_HUD.h"
 #include "AIController.h"
+#include "Components/DS_RespawnComponent.h"
+#include "DS_Utils.h"
 #include "DS_PlayerState.h"
 
 ADemoShooterModeBase::ADemoShooterModeBase()
@@ -48,6 +50,8 @@ void ADemoShooterModeBase::Killed(AController* KillerController, AController* Vi
     {
         VictimPlayerState->AddDeath();
     };
+
+    StartRespawn(VictimController);
 }
 
 void ADemoShooterModeBase::LogPlayersInfo()
@@ -64,6 +68,25 @@ void ADemoShooterModeBase::LogPlayersInfo()
         if (!PlayerState) continue;
 
         PlayerState->LogInfo();
+    };
+}
+
+void ADemoShooterModeBase::RespawnRequest(AController* Controller)
+{
+    ResetOnePlayer(Controller);
+}
+
+void ADemoShooterModeBase::GameOver()
+{
+    UE_LOG(LogTemp, Error, TEXT("GAME OVER!"))
+    LogPlayersInfo();
+
+    if (!GetWorld()) return;
+
+    for (auto Pawn : TActorRange<APawn>(GetWorld())) 
+    {
+        if (Pawn) Pawn->TurnOff();
+        Pawn->DisableInput(nullptr);
     };
 }
 
@@ -100,8 +123,7 @@ void ADemoShooterModeBase::GameTimerUpdate()
         }
         else
         {
-            UE_LOG(LogTemp, Error, TEXT("GAME OVER!"))
-            LogPlayersInfo();
+            GameOver();
         };
     };
 }
@@ -174,4 +196,15 @@ void ADemoShooterModeBase::SetTeamColor(AController *Controller)
         return;
 
     Character->SetPlayerColor(PlayerState->GetTeamColor());
-};
+}
+void ADemoShooterModeBase::StartRespawn(AController* Controller)
+{
+    const auto RespawnAvailable = RoundCountDown > MinTimeForRespawn + +GameData.RoundRespawnTime;
+    if (!RespawnAvailable) return;
+
+    const auto RespawnComponent = DS_Utils::GetComponentByUserClass<UDS_RespawnComponent>(Controller);
+    if (!RespawnComponent) return;
+
+    RespawnComponent->Respawn(GameData.RoundRespawnTime);
+}
+;
