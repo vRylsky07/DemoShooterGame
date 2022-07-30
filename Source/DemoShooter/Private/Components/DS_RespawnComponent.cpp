@@ -1,8 +1,7 @@
 // DemoShooter. All right reserved.
 
-
-#include "DemoShooterModeBase.h"
 #include "Components/DS_RespawnComponent.h"
+#include "DemoShooterModeBase.h"
 
 UDS_RespawnComponent::UDS_RespawnComponent()
 {

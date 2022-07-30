@@ -36,6 +36,12 @@ struct FWeaponData
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
     UAnimMontage *ReloadAnimMontage;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    USoundBase* EquipSound;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    USoundBase* ReloadSound;
 };
 
 USTRUCT(BlueprintType)

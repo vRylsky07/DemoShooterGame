@@ -44,3 +44,5 @@ AActor *UDS_AIPerceptionComponent::GetClosestEnemy() const
     };
     return BestActor;
 };
+
+

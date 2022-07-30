@@ -36,6 +36,9 @@ public:
     bool GetCurrentWeaponAmmoData(FAmmoData &AmmoData);
     void TryToAddAmmo();
 
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    ADS_BaseWeapon* GetCurrentWeapon() const { return CurrentWeapon; };
+
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 protected:

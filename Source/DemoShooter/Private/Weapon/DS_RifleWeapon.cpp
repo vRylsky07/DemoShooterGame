@@ -53,12 +53,15 @@ void ADS_RifleWeapon::MakeShot()
         return;
     };
 
+    MakeHit(HitResult, TraceStart, TraceEnd);
+
+    if (!GetOwner()) return;
+
     if (ShootSound)
     {
-        UGameplayStatics::PlaySound2D(GetWorld(), ShootSound);
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(), ShootSound, GetOwner()->GetActorLocation(), 1.0f, 1.0f, 0.0f);
+        //UGameplayStatics::PlaySound2D(GetWorld(), ShootSound);
     };
-
-    MakeHit(HitResult, TraceStart, TraceEnd);
 
     const auto HealthComponent = DS_Utils::GetComponentByUserClass<UDSHealthComponent>(Cast<APawn>(GetOwner()));
     DS_Utils::PlayCameraShake(GetOwner(), HealthComponent->IsDead(), CameraShake);
