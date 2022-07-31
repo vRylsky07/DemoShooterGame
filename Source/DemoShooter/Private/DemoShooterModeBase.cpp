@@ -6,6 +6,8 @@
 #include "AIController.h"
 #include "Components/DS_RespawnComponent.h"
 #include "DS_Utils.h"
+#include "GameFramework/PlayerStart.h"
+#include "Kismet/GameplayStatics.h"
 #include "DS_PlayerState.h"
 
 ADemoShooterModeBase::ADemoShooterModeBase()
@@ -34,6 +36,29 @@ UClass *ADemoShooterModeBase::GetDefaultPawnClassForController_Implementation(AC
     };
 
     return Super::GetDefaultPawnClassForController_Implementation(InController);
+}
+
+void ADemoShooterModeBase::RestartPlayer(AController* NewPlayer)
+{
+    if (NewPlayer == nullptr || NewPlayer->IsPendingKillPending())
+    {
+        return;
+    }
+
+    if (!GetWorld()) return;
+    TArray<AActor*> PS_Array;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), PS_Array);
+    int32 RandomPS = 0;
+    
+    if (PS_Array.Num() > 0) {
+        RandomPS = FMath::RandRange(0, PS_Array.Num() - 1);
+        RestartPlayerAtPlayerStart(NewPlayer, PS_Array[RandomPS]);
+    }
+    else {
+        if (GEngine)
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Player Start was not found!"));
+    };
+
 }
 
 void ADemoShooterModeBase::Killed(AController* KillerController, AController* VictimController)

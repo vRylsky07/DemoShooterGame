@@ -29,6 +29,7 @@ public:
 
     virtual void StartPlay() override;
     virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+    virtual void RestartPlayer(AController* NewPlayer) override;
 
     void Killed(AController* KillerController, AController* VictimController);
     void LogPlayersInfo();
