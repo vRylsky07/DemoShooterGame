@@ -5,6 +5,7 @@
 
 
 
+
 float UDS_PlayerHUD::GetHealhPercent() const
 {
     const auto HealthComponent = DS_Utils::GetComponentByUserClass<UDSHealthComponent>(GetOwningPlayerPawn());
@@ -46,15 +47,20 @@ bool UDS_PlayerHUD::IsPlayerSpectating() const
     const auto Controller = GetOwningPlayer();
     return Controller && Controller->GetStateName() == NAME_Spectating;
 }
+
+
 bool UDS_PlayerHUD::Initialize()
 {
-    const auto HealthComponent = DS_Utils::GetComponentByUserClass<UDSHealthComponent>(GetOwningPlayerPawn());
-    if (HealthComponent)
+    if (GetOwningPlayer()) 
     {
-        HealthComponent->OnHealthChanged.AddUObject(this, &UDS_PlayerHUD::OnHealthChanged);
+        GetOwningPlayer()->GetOnNewPawnNotifier().AddUObject(this, &UDS_PlayerHUD::OnNewPawn);
+        OnNewPawn(GetOwningPlayerPawn());
     };
+
         return Super::Initialize();
 }
+
+
 void UDS_PlayerHUD::OnHealthChanged(float Healh)
 {
     const auto HealthComponent = DS_Utils::GetComponentByUserClass<UDSHealthComponent>(GetOwningPlayerPawn());
@@ -62,4 +68,13 @@ void UDS_PlayerHUD::OnHealthChanged(float Healh)
     {
         OnTakeDamage();
     };
-};
+}
+void UDS_PlayerHUD::OnNewPawn(APawn* NewPawn)
+{
+    const auto HealthComponent = DS_Utils::GetComponentByUserClass<UDSHealthComponent>(NewPawn);
+    if (HealthComponent)
+    {
+        HealthComponent->OnHealthChanged.AddUObject(this, &UDS_PlayerHUD::OnHealthChanged);
+    };
+}
+;

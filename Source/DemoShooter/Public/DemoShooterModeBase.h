@@ -40,6 +40,9 @@ public:
 
     void RespawnRequest(AController * Controller);
 
+    UFUNCTION(BlueprintImplementableEvent, Category = "GamePlay")
+    void OnGameOverEvent();
+
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
     TSubclassOf<AAIController> AIControllerClass;

@@ -3,6 +3,7 @@
 
 #include "DemoShooterModeBase.h"
 #include "UI/DS_HUD.h"
+#include "UI/DS_PlayerHUD.h"
 #include "AIController.h"
 #include "Components/DS_RespawnComponent.h"
 #include "DS_Utils.h"
@@ -149,6 +150,7 @@ void ADemoShooterModeBase::GameTimerUpdate()
         else
         {
             GameOver();
+            OnGameOverEvent();
         };
     };
 }

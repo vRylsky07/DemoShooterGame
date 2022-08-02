@@ -17,6 +17,8 @@ class DEMOSHOOTER_API UDS_PlayerHUD : public UUserWidget
 
 	public:
 
+
+
     UPROPERTY(BlueprintReadOnly)
     UTexture2D *CrosshairIcon;
 
@@ -44,4 +46,5 @@ class DEMOSHOOTER_API UDS_PlayerHUD : public UUserWidget
     virtual bool Initialize() override;
 
     void OnHealthChanged(float Healh);
+    void OnNewPawn(APawn * NewPawn);
 };
