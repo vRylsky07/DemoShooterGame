@@ -12,6 +12,7 @@
 #include "Components/DS_WeaponComponent.h"
 #include "GameFramework/Controller.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 
 
 ADemoShooterPlayerCharacter::ADemoShooterPlayerCharacter(){
@@ -32,6 +33,11 @@ ADemoShooterPlayerCharacter::ADemoShooterPlayerCharacter(const FObjectInitialize
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArmComponent);
 
+    CameraCollisionComponent = CreateDefaultSubobject<USphereComponent>("CameraCollisionComponent");
+    CameraCollisionComponent->SetupAttachment(CameraComponent);
+    CameraCollisionComponent->SetSphereRadius(20.0f);
+    CameraCollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+
     HealthComponentPointer = CreateDefaultSubobject<UDSHealthComponent>("HealthComponent");
 
     WeaponComponent = CreateDefaultSubobject<UDS_WeaponComponent>("WeaponComponent");
@@ -47,7 +53,11 @@ void ADemoShooterPlayerCharacter::BeginPlay()
     check(HealthComponentPointer);
     check(DeathAnimMontagePtr);
     check(WeaponComponent);
+    check(CameraCollisionComponent);
     check(GetMesh());
+
+    CameraCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ADemoShooterPlayerCharacter::OnCameraBeginOverlap);
+    CameraCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &ADemoShooterPlayerCharacter::OnCameraEndOverlap);
 
     HealthComponentPointer->OnDeath.AddUObject(this, &ADemoShooterPlayerCharacter::OnDeath);
     HealthComponentPointer->OnHealthChanged.AddUObject(this, &ADemoShooterPlayerCharacter::OnHealthChanged);
@@ -147,6 +157,35 @@ void ADemoShooterPlayerCharacter::OnDeath()
     {
         GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
         GetMesh()->SetSimulatePhysics(true);
+    };
+}
+
+void ADemoShooterPlayerCharacter::OnCameraBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    CheckCameraOverlap();
+    
+}
+
+void ADemoShooterPlayerCharacter::OnCameraEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+    CheckCameraOverlap();
+}
+
+void ADemoShooterPlayerCharacter::CheckCameraOverlap()
+{
+    const auto HideMesh = CameraCollisionComponent->IsOverlappingComponent(GetCapsuleComponent());
+    GetMesh()->SetOwnerNoSee(HideMesh);
+    
+    TArray<USceneComponent*> MeshChildren;
+    GetMesh()->GetChildrenComponents(true, MeshChildren);
+
+    for (auto MeshChild : MeshChildren)
+    {
+        const auto MeshChildrenCasted = Cast<UPrimitiveComponent>(MeshChild);
+        if (MeshChildrenCasted) 
+        {
+        MeshChildrenCasted->SetOwnerNoSee(HideMesh);
+        };
     };
 }
 

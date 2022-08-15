@@ -13,6 +13,7 @@ class UDSHealthComponent;
 class UTextRenderComponent;
 class UAnimMontage;
 class UDS_WeaponComponent;
+class USphereComponent;
 
 UCLASS()
 class DEMOSHOOTER_API ADemoShooterPlayerCharacter : public ACharacter
@@ -43,6 +44,8 @@ protected:
   UPROPERTY(EditDefaultsOnly, Category = "Animations")
   UAnimMontage *DeathAnimMontagePtr;
 
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+  USphereComponent* CameraCollisionComponent;
 
 
 
@@ -80,6 +83,15 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Material")
     FName MaterialColorName = "Paint Color";
+
+    UFUNCTION()
+    void OnCameraBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+    UFUNCTION()
+    void OnCameraEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+    UFUNCTION()
+    void CheckCameraOverlap();
 
 	private:
     bool WantsToRun = false;
